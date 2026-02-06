@@ -15,6 +15,8 @@ public class AuthenticationService {
     private final JwtService jwtService;
 
     public String login(LoginDTO data) {
+        System.out.println("Login attempt for: " + data.getUserEmail());
+        System.out.println("Password received: " + data.getUserPassword());
         User user = userRepository.findByUserEmail(data.getUserEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
