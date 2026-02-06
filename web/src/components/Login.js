@@ -1,11 +1,27 @@
 import React from 'react';
 import './reusable/AuthPage.css';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    navigate('/dashboard');
+  }
+  const handleGuest = (e) => {
+    e.preventDefault();
+    navigate('/dashboard');
+  }
+  const handleRegister = (e) => {
+    e.preventDefault();
+    navigate('/register');
+  }
+
   return (
     <div className="auth-page-wrapper">
       <div className="auth-hero-section">
-        <h1>Welcome Back</h1>
+        <h1>Welcome</h1>
         <p>Access your dashboard and manage your services efficiently from your desktop.</p>
       </div>
 
@@ -22,11 +38,11 @@ const Login = () => {
             
             <div className="input-group">
               <label>Password</label>
-              <input className="auth-input" type="password" placeholder="••••••••" />
+              <input className="auth-input" type="password" placeholder="*********" />
             </div>
 
-            <button className="auth-btn btn-primary">Sign In</button>
-            <button type="button" className="auth-btn btn-guest">Continue as Guest</button>
+            <button className="auth-btn btn-primary" onClick={handleLogin}>Sign In</button>
+            <button type="button" className="auth-btn btn-guest" onClick={handleGuest}>Continue as Guest</button>
           </form>
 
           <div className="auth-footer">

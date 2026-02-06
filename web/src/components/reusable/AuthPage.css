@@ -6,7 +6,7 @@
   overflow: hidden;
   background-color: #f8fafc;
 }
-
+/* Side area styles */
 .auth-hero-section {
   flex: 1.2;
   background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
@@ -32,6 +32,7 @@
   line-height: 1.6;
 }
 
+/* Form section styles */
 .auth-form-section {
   flex: 1;
   display: flex;
