@@ -13,10 +13,6 @@ function App() {
 
         <Route path="/register" element={<Register />} />
 
-        {/* 4. Dashboard (Placeholder for after login) */}
-        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
-        
-        {/* 5. Catch-all for 404 - redirects back to login */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
