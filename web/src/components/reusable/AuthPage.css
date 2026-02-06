@@ -136,3 +136,16 @@
   text-decoration: none; 
   font-weight: 600; 
 }
+
+.auth-link {
+  color: #2563eb; 
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 5px;
+  transition: color 0.2s;
+}
+
+.auth-link:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}

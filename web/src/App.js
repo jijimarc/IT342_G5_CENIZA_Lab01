@@ -4,7 +4,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import ProfilePage from './components/ProfilePage';
-import AuthProvider from './components/AuthContext';
+import { AuthProvider } from './components/AuthContext';
 
 function App() {
   return (

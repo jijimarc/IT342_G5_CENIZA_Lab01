@@ -1,47 +1,86 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './reusable/AuthPage.css';
-import { useNavigate, Link } from 'react-router-dom';
 
 const Register = () => {
-	const navigate = useNavigate();
-	const handleRegister = (e) =>{
-		e.preventDefault();
-		navigate('/login');
-	}
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    userEmail: '',
+    userPassword: '',
+    confirmPassword: ''
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:8080/api/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        alert("Registration Successful!");
+        navigate('/login');
+      } else {
+        const errorData = await response.json();
+        alert("Registration failed: " + (errorData.message || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Error connecting to backend:", error);
+      alert("Cannot connect to server. Ensure backend is running.");
+    }
+  };
+
   return (
     <div className="auth-page-wrapper">
       <div className="auth-hero-section">
         <h1>Join Us</h1>
         <p>Create an account to start managing your portal services today.</p>
       </div>
-
       <div className="auth-form-section">
         <div className="auth-card">
           <h2>Create Account</h2>
-          <p className="auth-subtitle">Fill in the information below to get started.</p>
-          
-          <form className="auth-form">
-            <div className="input-group">
-              <label>Full Name</label>
-              <input className="auth-input" type="text" placeholder="John Doe" required/>
-            </div>
-
+          <form className="auth-form" onSubmit={handleRegister}>
             <div className="input-group">
               <label>Email Address</label>
-              <input className="auth-input" type="email" placeholder="name@company.com" required/>
+              <input 
+                name="userEmail"
+                type="email" 
+                className="auth-input"
+                onChange={handleChange}
+                required 
+              />
             </div>
-            
             <div className="input-group">
               <label>Password</label>
-              <input className="auth-input" type="password" placeholder="Minimum 8 characters" required/>
+              <input 
+                name="userPassword"
+                type="password" 
+                className="auth-input"
+                onChange={handleChange}
+                required 
+              />
             </div>
-
-            <button className="auth-btn btn-primary" onclick={handleRegister}>Create Account</button>
+            <div className="input-group">
+              <label>Confirm Password</label>
+              <input 
+                name="confirmPassword"
+                type="password" 
+                className="auth-input"
+                onChange={handleChange}
+                required 
+              />
+            </div>
+            <button type="submit" className="auth-btn btn-primary">Create Account</button>
           </form>
-
-          <div className="auth-footer">
-            Already have an account? <a href="/login">Login</a>
-          </div>
         </div>
       </div>
     </div>

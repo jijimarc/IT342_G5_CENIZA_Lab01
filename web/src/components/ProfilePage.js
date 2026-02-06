@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from './reusable/Sidebar';
 import './reusable/Dashboard.css';
 import './reusable/Profile.css';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from './AuthContext';
 
 const Profile = () => {
   const { user } = useAuth();
