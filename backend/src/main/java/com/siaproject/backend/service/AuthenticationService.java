@@ -7,6 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -14,9 +18,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public String login(LoginDTO data) {
-        System.out.println("Login attempt for: " + data.getUserEmail());
-        System.out.println("Password received: " + data.getUserPassword());
+    public Map<String, Object> login(LoginDTO data) {
         User user = userRepository.findByUserEmail(data.getUserEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -25,9 +27,14 @@ public class AuthenticationService {
         }
 
         user.setAuthenticated(true);
-        user.setLastLoginDate(new java.util.Date());
+        user.setLastLoginDate(LocalDate.now());
         userRepository.save(user);
+        String token = jwtService.generateToken(user.getUserEmail());
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("userId", user.getUserId());
+        response.put("email", user.getUserEmail());
 
-        return jwtService.generateToken(user.getUserEmail());
+        return response;
     }
 }

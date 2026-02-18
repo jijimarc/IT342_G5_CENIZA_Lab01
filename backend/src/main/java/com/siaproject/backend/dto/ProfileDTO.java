@@ -1,14 +1,17 @@
 package com.siaproject.backend.dto;
 import lombok.*;
-import java.util.*;
+import java.time.LocalDate;
 
-@Getter
-@Setter
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProfileDTO {
     private int userId;
     private String userEmail;
     private String userFirstname;
     private String userLastname;
     private String userMiddlename;
-    private Date userBirthdate;
+    private LocalDate userBirthdate;
+    private String profileImage;
+    private int age;
 }

@@ -1,7 +1,9 @@
 package com.siaproject.backend.entity;
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.*;
+
+import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Table(name = "users")
@@ -14,7 +16,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 150)
     private String userEmail;
 
     @Column(nullable = false, length = 150)
@@ -23,17 +25,19 @@ public class User {
     private String userFirstname;
     private String userLastname;
     private String userMiddlename;
-
-    @Temporal(TemporalType.DATE)
-    private Date userBirthdate;
-
-    @Transient
-    private int age;
-
-    @Temporal(TemporalType.DATE)
-    private Date lastLoginDate;
-
+    private LocalDate userBirthdate;
+    private LocalDate lastLoginDate;
     private boolean isAuthenticated;
     private boolean isLoggedOut;
 
+    @Column(name = "profile_image", columnDefinition = "TEXT")
+    private String profileImage;
+
+    @Transient
+    @Getter(AccessLevel.NONE)
+    private int userAge;
+    public int getAge() {
+        if (this.userBirthdate == null) return 0;
+        return Period.between(this.userBirthdate, LocalDate.now()).getYears();
+    }
 }

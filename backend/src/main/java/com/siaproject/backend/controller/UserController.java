@@ -10,26 +10,34 @@ import com.siaproject.backend.service.RegisterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
+import java.util.Map;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final RegisterService registrationService;
+    private final RegisterService registerService;
     private final AuthenticationService authenticationService;
     private final ProfileService profileService;
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody RegisterDTO data) {
-        User newUser = registrationService.register(data);
+        User newUser = registerService.register(data);
         return ResponseEntity.ok(newUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO data) {
-        String token = authenticationService.login(data);
-        return ResponseEntity.ok(token);
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginDTO data) {
+        Map<String, Object> response = authenticationService.login(data);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<ProfileDTO> getProfile(@PathVariable int id) {
+        ProfileDTO profile = profileService.getProfile(id);
+        return ResponseEntity.ok(profile);
     }
 
     @PutMapping("/profile")
