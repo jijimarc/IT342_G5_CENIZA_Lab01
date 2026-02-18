@@ -1,14 +1,26 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem('token') || null;
+  });
 
   const login = async (credentials, isGuest = false) => {
     if (isGuest) {
-      setUser({ name: 'Guest User', role: 'guest', isGuest: true });
+      const guestUser = { 
+        name: 'Guest User', 
+        role: 'guest', 
+        isGuest: true, 
+        userId: 0 
+      };
+      setUser(guestUser);
       return { success: true };
     }
 
@@ -23,14 +35,27 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (response.ok) {
-        const jwtToken = await response.text(); 
-        setToken(jwtToken);
-        setUser({ name: credentials.userEmail, role: 'admin', isGuest: false });
+        const data = await response.json();
+        
+        const userData = {
+          userId: data.userId,
+          email: credentials.userEmail,
+          role: 'admin',
+          isGuest: false
+        };
+
+        setToken(data.token);
+        setUser(userData);
+
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(userData));
+
         return { success: true };
       } else {
         return { success: false, message: "Invalid credentials" };
       }
     } catch (error) {
+      console.error("Login error:", error);
       return { success: false, message: "Server connection failed" };
     }
   };
@@ -38,6 +63,8 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setToken(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
   };
 
   return (
