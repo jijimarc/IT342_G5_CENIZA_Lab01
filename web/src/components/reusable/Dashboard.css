@@ -83,6 +83,11 @@
   font-size: 0.8rem;
 }
 
+.profile-avatar.guest-avatar {
+    background-color: #6c757d; 
+    color: white;
+}
+
 .dashboard-body {
   flex: 1;
   padding: 30px;
@@ -98,3 +103,4 @@
   align-items: center;
   color: #94a3b8;
 }
+
